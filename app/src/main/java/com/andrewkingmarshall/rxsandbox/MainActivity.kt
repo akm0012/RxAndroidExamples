@@ -1,13 +1,19 @@
 package com.andrewkingmarshall.rxsandbox
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
+import io.reactivex.functions.Function
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
+@SuppressLint("CheckResult")
 class MainActivity : AppCompatActivity() {
 
     var counter1 = 0
@@ -25,8 +31,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initLayout() {
-//        sugar()
-        noSugar()
+        sugar()
+//        noSugar()
     }
 
     private fun noSugar() {
@@ -38,14 +44,37 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        emitter
-            .map {
-                incrementCounter1()
-            }
-            .throttleFirst(1000, TimeUnit.MILLISECONDS)
-            .subscribe {
+        val consumer = object: Consumer<View> {
+            override fun accept(t: View?) {
                 incrementCounter2()
             }
+        }
+
+//        val observer = object : Observer<View> {
+//            override fun onSubscribe(d: Disposable) {
+//            }
+//
+//            override fun onNext(t: View) {
+//                incrementCounter2()
+//            }
+//
+//            override fun onError(e: Throwable) {
+//            }
+//
+//            override fun onComplete() {
+//            }
+//        }
+
+        emitter
+            .map(object: Function<View, View> {
+                override fun apply(v: View): View {
+                    incrementCounter1()
+                    return v
+                }
+            })
+            .throttleFirst(1000, TimeUnit.MILLISECONDS)
+//            .subscribe(observer)
+            .subscribe(consumer)
     }
 
     private fun sugar() {
