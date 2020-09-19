@@ -10,18 +10,18 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_click_delay.*
 import java.util.concurrent.TimeUnit
 
 @SuppressLint("CheckResult")
-class MainActivity : AppCompatActivity() {
+class ClickDelayActivity : AppCompatActivity() {
 
     var counter1 = 0
     var counter2 = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_click_delay)
 
         init()
     }
